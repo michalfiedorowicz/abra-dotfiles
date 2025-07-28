@@ -1,39 +1,40 @@
 # ─────────────────────────────────────────────────────────────
-#  ABRA  •  i3-gaps master config  •  v1.0-gold
-#  Retina-snappy, laptop-AND-dual-monitor friendly
+#  ABRA  •  i3-gaps master config • rev-2  (2025-07-28)
 # ─────────────────────────────────────────────────────────────
-set $mod  Mod4           # Super/Windows key
-font pango:JetBrainsMono Nerd Font 10
+set $mod Mod4                   # Super key
+font pango:JetBrainsMono Nerd Font Medium 11
 
-# ─── Core behaviour ──────────────────────────────────────────
-focus_follows_mouse       no
-mouse_warping             output       # keep pointer on same monitor
+# ─── Behaviour ───────────────────────────────────────────────
+focus_follows_mouse no
+mouse_warping       output         # pointer stays on active monitor
 workspace_auto_back_and_forth yes
-default_border            pixel 2       # gaps wants thin borders
-hide_edge_borders         smart
+default_border      pixel 2
+hide_edge_borders   smart
+popup_during_fullscreen smart
 
-# ─── Gaps (i3-gaps fork) ─────────────────────────────────────
-gaps inner 10
-gaps outer 20
-smart_gaps on             # remove outer gaps when only one window
+# ─── Gaps ────────────────────────────────────────────────────
+gaps inner 8
+gaps outer 18
+smart_gaps on
 
-# ─── Scratch-pads (lazy launch) ──────────────────────────────
+# ─── Scratch-pads ────────────────────────────────────────────
 for_window [title="scratchpad-term"] move to scratchpad, border pixel 0, resize set 60 ppt 60 ppt
-bindsym $mod+Return  exec --no-startup-id kitty --title scratchpad-term
-bindsym $mod+Shift+Return scratchpad show
+bindsym $mod+Return        exec --no-startup-id kitty --title scratchpad-term
+bindsym $mod+Shift+Return  scratchpad show
 
-bindsym $mod+p exec grimshot copy area          # fast screenshot to clipboard
-bindsym $mod+c exec --no-startup-id rofi -show drun
+# Screenshots & launcher
+bindsym $mod+p   exec grimshot copy area
+bindsym $mod+space exec --no-startup-id rofi -show drun
 
-# ─── Workspace taxonomy ─────────────────────────────────────
-set $WS_TERM   "1:   TERM"
-set $WS_WEB    "2:   WEB"
-set $WS_CODE   "3:   CODE"
-set $WS_DOC    "4:   DOC"
-set $WS_CHAT   "5:   CHAT"
-set $WS_MISC   "6:   MISC"
+# ─── Workspaces ──────────────────────────────────────────────
+set $WS_TERM  "1:   TERM"
+set $WS_WEB   "2:   WEB"
+set $WS_CODE  "3:   CODE"
+set $WS_DOC   "4:   DOC"
+set $WS_CHAT  "5:   CHAT"
+set $WS_MISC  "6:   MISC"
 
-# quick keys
+# quick jump
 bindsym $mod+1 workspace $WS_TERM
 bindsym $mod+2 workspace $WS_WEB
 bindsym $mod+3 workspace $WS_CODE
@@ -41,7 +42,7 @@ bindsym $mod+4 workspace $WS_DOC
 bindsym $mod+5 workspace $WS_CHAT
 bindsym $mod+6 workspace $WS_MISC
 
-# move focused window
+# send window
 bindsym $mod+Shift+1 move container to workspace $WS_TERM
 bindsym $mod+Shift+2 move container to workspace $WS_WEB
 bindsym $mod+Shift+3 move container to workspace $WS_CODE
@@ -49,7 +50,7 @@ bindsym $mod+Shift+4 move container to workspace $WS_DOC
 bindsym $mod+Shift+5 move container to workspace $WS_CHAT
 bindsym $mod+Shift+6 move container to workspace $WS_MISC
 
-# ─── Vim-like focus / resize ─────────────────────────────────
+# ─── Vim-style nav/resize ───────────────────────────────────
 bindsym $mod+h focus left
 bindsym $mod+j focus down
 bindsym $mod+k focus up
@@ -60,31 +61,31 @@ bindsym $mod+Shift+k move up
 bindsym $mod+Shift+l move right
 
 mode "resize" {
-    bindsym h resize shrink width 10 px or 10 ppt
-    bindsym l resize grow   width 10 px or 10 ppt
-    bindsym k resize shrink height 10 px or 10 ppt
-    bindsym j resize grow   height 10 px or 10 ppt
+    bindsym h resize shrink width 10 ppt
+    bindsym l resize grow   width 10 ppt
+    bindsym k resize shrink height 10 ppt
+    bindsym j resize grow   height 10 ppt
     bindsym Return mode "default"
     bindsym Escape mode "default"
 }
 bindsym $mod+r mode "resize"
 
-# ─── Layout toggles ──────────────────────────────────────────
+# ─── Layout toggles ─────────────────────────────────────────
 bindsym $mod+Tab layout tabbed
 bindsym $mod+e   layout toggle split
 bindsym $mod+f   fullscreen toggle
-bindsym $mod+space floating toggle
+bindsym $mod+Shift+space floating toggle
 
 # ─── Session control ────────────────────────────────────────
 bindsym $mod+Shift+c reload
 bindsym $mod+Shift+r restart
-bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'Exit i3?' -B 'Yes' 'i3-msg exit'"
+bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'Exit i3 session?' -B 'Yes' 'i3-msg exit'"
 
-# ─── Autostart (delegated to user-systemd) ───────────────────
-exec_always --no-startup-id systemctl --user import-environment DISPLAY XAUTHORITY
+# ─── Autostart via user-systemd ─────────────────────────────
+exec_always --no-startup-id systemctl --user import-environment DISPLAY WAYLAND_DISPLAY XAUTHORITY
 exec_always --no-startup-id systemctl --user start abra-session.target
 
-# ─── Bar (Polybar) ───────────────────────────────────────────
+# ─── Polybar wrapper ────────────────────────────────────────
 bar {
     status_command      $HOME/.config/polybar/launch.sh
     i3bar_command       polybar
