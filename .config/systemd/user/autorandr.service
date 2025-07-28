@@ -1,0 +1,7 @@
+[Unit]
+Description = Autorandr profile loader
+PartOf      = abra-session.target
+
+[Service]
+Type=oneshot
+ExecStart = /usr/bin/autorandr --change --force
