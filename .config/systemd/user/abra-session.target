@@ -1,0 +1,3 @@
+[Unit]
+Description = ABRA – combined graphical session target
+Requires    = picom.service polybar.service autorandr.service
