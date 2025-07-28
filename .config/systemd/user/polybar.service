@@ -1,0 +1,7 @@
+[Unit]
+Description = Polybar panel
+PartOf      = abra-session.target
+
+[Service]
+ExecStart = %h/.config/polybar/launch.sh
+Restart   = on-failure
