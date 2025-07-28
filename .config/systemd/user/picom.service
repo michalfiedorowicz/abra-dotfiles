@@ -1,0 +1,7 @@
+[Unit]
+Description = Picom compositor
+PartOf      = abra-session.target
+
+[Service]
+ExecStart = /usr/bin/picom --config=%h/.config/picom.conf
+Restart   = on-failure
